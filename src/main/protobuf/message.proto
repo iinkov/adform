@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package com.example.protobuf;
+
+message AggregatedData {
+  int64 hour = 1;
+  int64 clicks_count = 2;
+  int64 impressions_count = 3;
+  int64 clicks_time_diff = 4;
+  int64 impressions_time_diff = 5;
+}
