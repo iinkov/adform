@@ -50,16 +50,12 @@ object Main extends App {
   // Joining the DataFrames on the 'hour' column
   val combinedDF = clicksCounts
     .join(impressionCounts, "hour", "outer")
-    .na.fill(0)
     .orderBy("hour")
 
   // Add time_diff
   val diffs = combinedDF.join(clicksWithDiffInHours.select("hour", "time_diff_hours"), Seq("hour"), "left_outer").withColumnRenamed("time_diff_hours", "clicks_time_diff")
     .join(impressionWithDiffInHours.select("hour", "time_diff_hours"), Seq("hour"), "left_outer").withColumnRenamed("time_diff_hours", "impressions_time_diff")
-    .na.fill(Map(
-      "clicks_time_diff" -> 0,
-      "impressions_time_diff" -> 0
-    ))
+    .na.fill(0)
 
   // kafka
   val dfWithProto: Dataset[Array[Byte]] = diffs.map(row => {
